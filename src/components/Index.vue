@@ -8,6 +8,9 @@
             <div class="bodyIndex">
               {{ post.body[0].value | excerpt-filter }}
             </div>
+            <div class="authorIndex">
+             
+            </div>
           </div>
         </div>
     </div>
@@ -16,7 +19,7 @@
 import axios from 'axios'
 import moment from 'moment'
 /* eslint-disable no-unused-vars */
-import { excerptFilter } from '../filters/Helpers.js'
+import { excerptFilter } from '../filters/Filters.js'
 
 export default{
   name: 'Index',
