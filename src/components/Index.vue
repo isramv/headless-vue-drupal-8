@@ -7,39 +7,48 @@
             <router-link :to="{ name: 'post', params: { route_name: cleanPath(post.path), nid: post.nid, index }}">
               <h2 class="titleIndex">{{ post.title }}</h2>  
             </router-link>
-            <div class="bodyIndex">
+            <div v-if='post.body_summary' class="bodyIndex">
               {{ post.body_summary | excerpt-filter }}
+              <!-- {{ post.body_summary }} -->
             </div>
             <div class="authorContainerIndex">
               <div class="authorPictureIndex" v-html="parseImages(post.user_picture)"></div>
               <div class="authorName">{{ post.author_name }}</div>
             </div>
           </div>
-          <div v-infinite>Infinite</div>
+          <!-- <div v-infinite>Infinite</div> -->
         </div>
     </div>
 </template>
 <script>
 import axios from 'axios'
 import { store } from '../vuex/store.js'
+import _ from 'lodash'
 /* eslint-disable no-unused-vars */
 import { excerptFilter } from '../filters/Filters.js'
 
 export default{
   name: 'Index',
   store,
-  data () {
-    return {
-      posts: []
+  computed: {
+    posts () {
+      return this.$store.state.posts
     }
   },
-  directives: {
-    Infinite () {
-      console.log('infinite')
-    }
-  },
+  // directives: {
+  //   Infinite () {
+  //     console.log('infinite')
+  //   }
+  // },
   created () {
-    window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('scroll', _.throttle((event) => {
+      if (this.$store.state.updating === false && this.$route.name === 'index') {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+          console.log('we should load more posts....')
+          this.$store.dispatch('getMorePosts').then(console.log('loading finished...'))
+        }
+      }
+    }, 500, { 'leading': false, 'trailing': true }))
     /* eslint-disable no-undef */
     if (localStorage.getItem('posts') === null) {
       axios.get('//dev.chapterthree.com/api/1.1/blog/')
@@ -70,10 +79,6 @@ export default{
         stringResult = result[1]
       }
       return stringResult
-    },
-    handleScroll (event) {
-      console.log(event)
-      console.log(window)
     }
   }
 }

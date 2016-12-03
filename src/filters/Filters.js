@@ -8,6 +8,9 @@ const excerptFilter = Vue.filter('excerpt-filter', (value) => {
   // extract first paragraph.
   let rx = new RegExp(/<p>.+<\/p>/, 'i')
   let result = firstClean.match(rx)
+  if (result === null) {
+    return result
+  }
   let secondClean = result.length > 0 ? result[0] : value
   let rx2 = new RegExp(/&([a-z]{2,4});/, 'ig')
   return secondClean.replace(rx2, '').replace('<p>', '').replace('</p>', '...')
