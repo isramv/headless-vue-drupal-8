@@ -9,9 +9,13 @@ const store = new Vuex.Store({
   state: {
     posts: {},
     post: {},
+    postsIndex: {},
     updating: false
   },
   mutations: {
+    setPostsIndex (state, posts) {
+      state.postsIndex = posts
+    },
     setPosts (state, posts) {
       state.posts = posts
     },

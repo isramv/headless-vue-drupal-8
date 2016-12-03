@@ -2,15 +2,22 @@
   <div>
     <h1>{{ post.title }}</h1>
     {{ post.created }} by {{ post.author_name }}
-    <div v-html="parseImages(post.body)" v-hljs></div>
+    <!-- <div v-html="parseImages(post.body)" v-hljs></div> -->
 	</div>
 </template>
 
+<style lang="css">
+  code {
+    background-color: inherit !important;
+  }
+</style>
+  
 <script>
   /* eslint-disable no-unused-vars */
   import axios from 'axios'
   import { store } from '../vuex/store.js'
   import hljs from 'highlight.js'
+  import _ from 'lodash'
   var hljsCss = require('highlight.js/styles/darkula.css')
 
   export default{
@@ -31,6 +38,16 @@
         return this.$store.state.post
       }
     },
+    beforeCreate () {
+      let path = this.$route.path
+      /* eslint-disable no-undef */
+      if (localStorage.getItem('postsIndex') !== null) {
+        let result = _.find(JSON.parse(localStorage.getItem('postsIndex')), (o) => {
+          return o.path === path
+        })
+        let resultNid = result.nid
+      }
+    },
     created () {
       /* eslint-disable no-undef */
       if (localStorage.getItem('post') !== null) {
@@ -44,6 +61,14 @@
         let post = this.$store.state.posts[this.$route.params.index]
         this.$store.commit('setPost', post)
         localStorage.setItem('post', JSON.stringify(post))
+      }
+      if (_.isEmpty(this.$store.state.post)) {
+        let path = this.$route.path
+        this.$store.dispatch('getIndexPosts').then(() => {
+          let result = _.find(this.$store.state.postsIndex, (o) => {
+            return o.path === path
+          })
+        })
       }
     },
     methods: {

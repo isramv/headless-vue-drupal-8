@@ -16,6 +16,16 @@ const actions = {
         // localStorage.setItem('posts', JSON.stringify(response.data))
         // this.$store.commit('setPosts', response.data)
       })
+  },
+  getIndexPosts (context) {
+    console.log('getting index posts...')
+    axios.get('//dev.chapterthree.com/api/1.1/blog/index')
+      .then((response) => {
+        context.commit('setPostsIndex', response.data)
+        /* eslint-disable no-undef */
+        localStorage.setItem('postsIndex', JSON.stringify(response.data))
+      }
+    )
   }
 }
 

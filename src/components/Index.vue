@@ -49,7 +49,14 @@ export default{
         }
       }
     }, 500, { 'leading': false, 'trailing': true }))
+
     /* eslint-disable no-undef */
+    if (localStorage.getItem('postsIndex') === null) {
+      this.$store.dispatch('getIndexPosts')
+    } else {
+      this.$store.commit('setPostsIndex', JSON.parse(localStorage.getItem('postsIndex')))
+    }
+
     if (localStorage.getItem('posts') === null) {
       axios.get('//dev.chapterthree.com/api/1.1/blog/')
         .then((response) => {
