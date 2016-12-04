@@ -1,6 +1,8 @@
-# mytestapp
+# c3-blog-vuejs
 
-> A Vue.js project
+Implementation of C3 blog in vuejs
+
+> A Vue.js port of the C3 blog
 
 ## Build Setup
 
