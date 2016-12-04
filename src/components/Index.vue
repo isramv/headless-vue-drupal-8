@@ -16,7 +16,7 @@
               <div class="authorName">{{ post.author_name }}</div>
             </div>
           </div>
-          <!-- <div v-infinite>Infinite</div> -->
+          <div class="loading" v-if='loading'>Loading more posts... hold on</div>
         </div>
     </div>
 </template>
@@ -33,6 +33,9 @@ export default{
   computed: {
     posts () {
       return this.$store.state.posts
+    },
+    loading () {
+      return this.$store.state.updating
     }
   },
   // directives: {
@@ -94,5 +97,17 @@ export default{
   .authorPictureIndex img {
     max-width: 100px;
     height: auto;
+  }
+  .loading {
+    width: 100%;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    padding: 40px;
+    margin-bottom: 40px;
+    position: fixed;
+    bottom: 40px;
+    margin: 0 auto;
+    background: rgba(78, 255, 131, 0.2);
   }
 </style>

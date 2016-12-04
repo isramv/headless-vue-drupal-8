@@ -2,7 +2,7 @@
   <div>
     <h1>{{ post.title }}</h1>
     {{ post.created }} by {{ post.author_name }}
-    <!-- <div v-html="parseImages(post.body)" v-hljs></div> -->
+    <div v-html="parseImages(post.body)" v-hljs></div>
 	</div>
 </template>
 
@@ -40,12 +40,8 @@
     },
     beforeCreate () {
       let path = this.$route.path
-      /* eslint-disable no-undef */
-      if (localStorage.getItem('postsIndex') !== null) {
-        let result = _.find(JSON.parse(localStorage.getItem('postsIndex')), (o) => {
-          return o.path === path
-        })
-        let resultNid = result.nid
+      if (_.isEmpty(this.$store.state.posts)) {
+        this.$store.dispatch('getSinglePost', path)
       }
     },
     created () {
@@ -54,21 +50,14 @@
         let post = localStorage.getItem('post')
         this.$store.commit('setPost', JSON.parse(post))
       }
-      if (typeof this.$route.params.nid === 'undefined') {
-        console.log('variable not defined')
-      }
+      // todo deprecate this.
+      // if (typeof this.$route.params.nid === 'undefined') {
+      //   console.log('variable not defined')
+      // }
       if (typeof this.$route.params.index !== 'undefined') {
         let post = this.$store.state.posts[this.$route.params.index]
         this.$store.commit('setPost', post)
         localStorage.setItem('post', JSON.stringify(post))
-      }
-      if (_.isEmpty(this.$store.state.post)) {
-        let path = this.$route.path
-        this.$store.dispatch('getIndexPosts').then(() => {
-          let result = _.find(this.$store.state.postsIndex, (o) => {
-            return o.path === path
-          })
-        })
       }
     },
     methods: {
