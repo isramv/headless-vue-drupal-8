@@ -1,8 +1,8 @@
-# c3-blog-vuejs
+# Headless demo with Vue.js
 
-Implementation of C3 blog in vuejs
+In your D8, you need.
 
-> A Vue.js port of the C3 blog
+[jsonapi](https://www.drupal.org/project/jsonapi) and the following module. [path_rest](https://github.com/isramv/path_rest)
 
 ## Build Setup
 
