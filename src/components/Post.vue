@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-container uk-container-center">
+  <div>
     <div v-if="post.attributes">
       <div class="uk-cover-container uk-height-medium" v-if="post.heroImage">
         <img v-bind:src="addUrl(post.heroImage)" alt="" uk-cover>

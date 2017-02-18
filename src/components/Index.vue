@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-container uk-container-center">
+  <div>
     <h1>Other Blog demo!</h1>
     <div class="post-container">
       <div class="postIndex" v-for="(post, index) in posts">
