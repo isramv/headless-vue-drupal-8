@@ -1,17 +1,26 @@
 <template>
-  <div>
+  <div class="uk-container uk-container-center">
     <div v-if="post.attributes">
-      <div v-bind:style="{ 'background-image': 'url(' + addUrl(post.heroImage) + ')' }">
-        <h1>{{ post.attributes.title }}</h1>
+      <div class="uk-cover-container uk-height-medium" v-if="post.heroImage">
+        <img v-bind:src="addUrl(post.heroImage)" alt="" uk-cover>
       </div>
-      <p v-html="post.attributes.body.value"></p>
     </div>
-	</div>
+    <h1 class="uk-heading-line uk-text-center">{{ post.attributes.title }}</h1>
+    <div class="uk-container">
+      <div class="uk-grid">
+        <p v-html="post.attributes.body.value"></p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="css">
   code {
     background-color: inherit !important;
+  }
+  .header {
+    min-height: 400px;
+    background-size: cover;
   }
 </style>
 
