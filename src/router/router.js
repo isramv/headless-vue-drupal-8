@@ -30,7 +30,7 @@ const routes = [
   },
   {
     name: 'post',
-    path: '/blog/:route_name',
+    path: '/:route',
     component: Post,
     meta: { scrollToTop: true }
   }

@@ -1,8 +1,11 @@
 <template>
   <div>
-    <h1>{{ post.title }}</h1>
-    {{ post.created }} by {{ post.author_name }}
-    <div v-html="parseImages(post.body)" v-hljs></div>
+    <div v-if="post.attributes">
+      <div v-bind:style="{ 'background-image': 'url(' + addUrl(post.heroImage) + ')' }">
+        <h1>{{ post.attributes.title }}</h1>
+      </div>
+      <p v-html="post.attributes.body.value"></p>
+    </div>
 	</div>
 </template>
 
@@ -11,25 +14,28 @@
     background-color: inherit !important;
   }
 </style>
-  
+
 <script>
   /* eslint-disable no-unused-vars */
   import axios from 'axios'
   import { store } from '../vuex/store.js'
-  import hljs from 'highlight.js'
   import _ from 'lodash'
-  var hljsCss = require('highlight.js/styles/darkula.css')
 
   export default{
     name: 'Post',
     store: store,
-    directives: {
-      hljs (el) {
-        Array.from(el.getElementsByClassName('brush:plain;')).forEach(item => {
-          item.className = 'nohighlight hljs'
-        })
-        Array.from(el.getElementsByTagName('PRE')).forEach(item => {
-          hljs.highlightBlock(item)
+    beforeRouteEnter (to, from, next) {
+      if (to.name === 'post') {
+        store.dispatch('getSinglePost', to.params.route).then(data => {
+          let imageIsUndefined = _.isUndefined(data.data.data.relationships.field_image.links)
+          if (!imageIsUndefined) {
+            let relatedLink = data.data.data.relationships.field_image.links.related
+            store.dispatch('getRelatedImage', relatedLink).then(data => {
+              next()
+            })
+          } else {
+            next()
+          }
         })
       }
     },
@@ -38,33 +44,9 @@
         return this.$store.state.post
       }
     },
-    beforeCreate () {
-      let path = this.$route.path
-      if (_.isEmpty(this.$store.state.posts)) {
-        this.$store.dispatch('getSinglePost', path)
-      }
-    },
-    created () {
-      /* eslint-disable no-undef */
-      if (localStorage.getItem('post') !== null) {
-        let post = localStorage.getItem('post')
-        this.$store.commit('setPost', JSON.parse(post))
-      }
-      // todo deprecate this.
-      // if (typeof this.$route.params.nid === 'undefined') {
-      //   console.log('variable not defined')
-      // }
-      if (typeof this.$route.params.index !== 'undefined') {
-        let post = this.$store.state.posts[this.$route.params.index]
-        this.$store.commit('setPost', post)
-        localStorage.setItem('post', JSON.stringify(post))
-      }
-    },
     methods: {
-      parseImages (string) {
-        var find = 'src="/sites/default'
-        var re = new RegExp(find, 'g')
-        return string.replace(re, 'src="http://dev.chapterthree.com/sites/default')
+      addUrl (data) {
+        return `http://drupalvm.dev${data}`
       }
     }
   }

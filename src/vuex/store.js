@@ -8,22 +8,23 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     posts: {},
-    post: {},
-    postsIndex: {},
+    post: {
+      heroImage: ''
+    },
     updating: false
   },
   mutations: {
     setPostsIndex (state, posts) {
       state.postsIndex = posts
     },
+    setHeroImage (state, heroImageString) {
+      state.post.heroImage = heroImageString
+    },
     setPosts (state, posts) {
       state.posts = posts
     },
     setPost (state, post) {
       state.post = post
-    },
-    addItemToPosts (state, post) {
-      state.posts.push(post)
     },
     setUpdating (state, value) {
       state.updating = value
