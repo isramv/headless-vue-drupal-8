@@ -16,7 +16,7 @@ const actions = {
   getSinglePost (context, path) {
     // get the UUID from drupal.
     return new Promise((resolve, reject) => {
-      axios.get('//drupalvm.dev/pathapi/routes?route=' + path)
+      axios.get('//drupalvm.dev/path/api/routes?route=' + path)
         .then(data => {
           context.commit('setPost', data.data.data)
           resolve(data)
